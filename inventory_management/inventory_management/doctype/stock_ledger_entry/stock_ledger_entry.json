@@ -38,11 +38,13 @@
    "label": "Valuation Rate"
   },
   {
+   "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
    "label": "Posting Date"
   },
   {
+   "default": "Now",
    "fieldname": "time",
    "fieldtype": "Time",
    "label": "Posting Time"
@@ -50,7 +52,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-07-11 17:11:36.846986",
+ "modified": "2023-07-12 16:45:12.485658",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Stock Ledger Entry",
