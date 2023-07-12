@@ -7,9 +7,15 @@ from frappe.model.document import Document
 
 class Item(Document):
     def before_save(self):
-        receipt = self.opening_warehouse or self.opening_rate or self.opening_qty
-        if receipt:
+        if self.is_receipt():
             self.validate_receipt()
+
+    def after_insert(self):
+        if self.is_receipt():
+            self.create_stock_entry()
+
+    def is_receipt(self):
+        return self.opening_warehouse or self.opening_rate or self.opening_qty
 
     def validate_receipt(self):
         self.validate_field(self.opening_warehouse, "warehouse")
@@ -18,4 +24,24 @@ class Item(Document):
 
     def validate_field(self, field, str_field):
         if not field:
-            frappe.throw("Enter valid opening {} for receipt".format(str_field))
+            frappe.throw(
+                "Enter valid opening {} for receipt stock entry".format(str_field)
+            )
+
+    def create_stock_entry(self):
+        stock_entry = frappe.get_doc(
+            {
+                "doctype": "Stock Entry",
+                "type": "Receipt",
+                "items": [
+                    {
+                        "item": self.name,
+                        "tgt_warehouse": self.opening_warehouse,
+                        "qty": self.opening_qty,
+                        "rate": self.opening_rate,
+                    }
+                ],
+            }
+        )
+        stock_entry.insert()
+        stock_entry.submit()

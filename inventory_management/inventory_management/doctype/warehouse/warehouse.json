@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:title",
  "creation": "2023-07-11 13:58:54.089032",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -71,10 +72,11 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2023-07-12 12:14:25.083641",
+ "modified": "2023-07-12 13:51:37.565375",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Warehouse",
+ "naming_rule": "By fieldname",
  "nsm_parent_field": "parent_warehouse",
  "owner": "Administrator",
  "permissions": [

@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:code",
  "creation": "2023-07-11 13:55:01.390558",
  "default_view": "List",
  "doctype": "DocType",
@@ -60,10 +61,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-07-12 13:29:09.325027",
+ "modified": "2023-07-12 15:02:33.612288",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Item",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
