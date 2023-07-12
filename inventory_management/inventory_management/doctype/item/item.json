@@ -40,22 +40,27 @@
    "fieldname": "opening_warehouse",
    "fieldtype": "Link",
    "label": "Opening Warehouse",
-   "options": "Warehouse"
+   "options": "Warehouse",
+   "set_only_once": 1
   },
   {
    "fieldname": "opening_qty",
    "fieldtype": "Int",
-   "label": "Opening Quantity"
+   "label": "Opening Quantity",
+   "non_negative": 1,
+   "set_only_once": 1
   },
   {
    "fieldname": "opening_rate",
    "fieldtype": "Float",
-   "label": "Opening Valuation Rate"
+   "label": "Opening Valuation Rate",
+   "non_negative": 1,
+   "set_only_once": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-07-11 17:04:15.093758",
+ "modified": "2023-07-12 13:29:09.325027",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Item",
