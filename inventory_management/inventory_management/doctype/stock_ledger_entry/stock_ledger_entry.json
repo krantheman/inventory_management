@@ -10,7 +10,7 @@
   "item",
   "warehouse",
   "qty_change",
-  "rate",
+  "valuation_rate",
   "date",
   "time"
  ],
@@ -33,11 +33,6 @@
    "label": "Quantity Change"
   },
   {
-   "fieldname": "rate",
-   "fieldtype": "Float",
-   "label": "Valuation Rate"
-  },
-  {
    "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
@@ -48,11 +43,16 @@
    "fieldname": "time",
    "fieldtype": "Time",
    "label": "Posting Time"
+  },
+  {
+   "fieldname": "valuation_rate",
+   "fieldtype": "Float",
+   "label": "Valuation Rate"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-07-12 16:45:12.485658",
+ "modified": "2023-07-13 11:12:49.344515",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Stock Ledger Entry",
