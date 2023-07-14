@@ -14,10 +14,29 @@ class StockEntry(Document):
         if self.type == "Transfer":
             self.validate_transfer()
 
+    def before_save(self):
+        print(self.items)
+        for item in self.items:
+            if item.src_warehouse:
+                item_stock = item.get_stock()
+                if not item_stock:
+                    frappe.throw(
+                        "There is not enough stock of {} available at {} for this operation".format(
+                            item.item, item.src_warehouse
+                        )
+                    )
+
     def on_submit(self):
         for item in self.items:
             if item.src_warehouse:
-                item.create_stock_ledger_entry(is_tgt_warehouse=False)
+                item_stock = item.get_stock()
+                if not item_stock:
+                    frappe.throw(
+                        "There is not enough stock of {} available at {} for this operation".format(
+                            item.item, item.src_warehouse
+                        )
+                    )
+                # item.create_stock_ledger_entry(is_tgt_warehouse=False)
             if item.tgt_warehouse:
                 item.create_stock_ledger_entry(is_tgt_warehouse=True)
 

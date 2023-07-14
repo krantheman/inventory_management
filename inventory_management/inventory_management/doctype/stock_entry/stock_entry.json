@@ -39,7 +39,7 @@
    "fieldname": "type",
    "fieldtype": "Select",
    "label": "Type",
-   "options": "Receipt\nConsume\nTransfer"
+   "options": "Transfer\nReceipt\nConsume"
   },
   {
    "fieldname": "items",
@@ -52,7 +52,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-07-12 17:41:52.569547",
+ "modified": "2023-07-14 11:55:57.650780",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Stock Entry",
