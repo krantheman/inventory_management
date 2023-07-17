@@ -15,7 +15,6 @@ class StockEntry(Document):
             self.validate_transfer()
 
     def before_save(self):
-        print(self.items)
         for item in self.items:
             if item.src_warehouse:
                 item_stock = item.get_stock()
@@ -49,11 +48,15 @@ class StockEntry(Document):
 
     def validate_receipt(self):
         for item in self.items:
+            if not item.tgt_warehouse:
+                frappe.throw("Receipt entry must have target warehouse")
             if item.src_warehouse:
                 frappe.throw("Receipt entry cannot have source warehouse")
 
     def validate_consume(self):
         for item in self.items:
+            if not item.src_warehouse:
+                frappe.throw("Consume entry must have source warehouse")
             if item.tgt_warehouse:
                 frappe.throw("Consume entry cannot have target warehouse")
 

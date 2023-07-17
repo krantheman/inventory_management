@@ -8,18 +8,6 @@ from frappe.query_builder.functions import Sum
 
 
 class StockEntryItem(Document):
-    def get_stock(self):
-        StockLedgerEntry = DocType("Stock Ledger Entry")
-        item_stock = (
-            frappe.qb.from_(StockLedgerEntry)
-            .where(
-                (StockLedgerEntry.item == self.item)
-                & (StockLedgerEntry.warehouse == self.src_warehouse)
-            )
-            .select(Sum(StockLedgerEntry.qty_change).as_("value"))
-        ).run(as_dict=True)
-        return item_stock[0].value
-
     def create_stock_ledger_entry(self, is_tgt_warehouse, is_cancel=False):
         # param is_tgt_warehouse: true if target warehouse, false if source warehouse
         # param is_cancel: true while cancelling form, false while submitting form
