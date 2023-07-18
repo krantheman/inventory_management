@@ -22,7 +22,16 @@ frappe.ui.form.on("Stock Entry Item", {
     validateWarehouse(cdt, cdn, "tgt_warehouse");
   },
   qty(frm, cdt, cdn) {
-    validateStock(frm, cdt, cdn, "qty");
+    if (frappe.get_doc(cdt, cdn).qty <= 0) {
+      frappe.model.set_value(cdt, cdn, "qty", null);
+    } else {
+      validateStock(frm, cdt, cdn, "qty");
+    }
+  },
+  rate(frm, cdt, cdn) {
+    if (frappe.get_doc(cdt, cdn).rate <= 0) {
+      frappe.model.set_value(cdt, cdn, "rate", null);
+    }
   },
 });
 
@@ -100,8 +109,8 @@ const updateWarehouseProperties = (frm, warehouse, reqd) => {
   frm.fields_dict.items.grid.update_docfield_property(warehouse, "reqd", reqd);
   frm.fields_dict.items.grid.update_docfield_property(
     warehouse,
-    "hidden",
-    reqd ? 0 : 1
+    "read_only",
+    1 - reqd
   );
 };
 
