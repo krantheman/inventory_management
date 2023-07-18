@@ -15,23 +15,17 @@ frappe.ui.form.on("Stock Entry Item", {
     validateStock(frm, cdt, cdn, "item");
   },
   src_warehouse(frm, cdt, cdn) {
-    validateStock(frm, cdt, cdn, "src_warehouse");
     validateWarehouse(cdt, cdn, "src_warehouse");
+    validateStock(frm, cdt, cdn, "src_warehouse");
   },
   tgt_warehouse(frm, cdt, cdn) {
     validateWarehouse(cdt, cdn, "tgt_warehouse");
   },
   qty(frm, cdt, cdn) {
-    if (frappe.get_doc(cdt, cdn).qty <= 0) {
-      frappe.model.set_value(cdt, cdn, "qty", null);
-    } else {
-      validateStock(frm, cdt, cdn, "qty");
-    }
+    validateQty(frm, cdt, cdn);
   },
   rate(frm, cdt, cdn) {
-    if (frappe.get_doc(cdt, cdn).rate <= 0) {
-      frappe.model.set_value(cdt, cdn, "rate", null);
-    }
+    validateRate(cdt, cdn);
   },
 });
 
@@ -51,7 +45,7 @@ const validateStock = async (frm, cdt, cdn, field) => {
         `Warehouse: ${currentRow.src_warehouse} | Available stock: ${availableItemStock} | Outgoing quantity: ${outgoingItemQty}`
       ),
     });
-    frappe.model.set_value(cdt, cdn, field, null);
+    frappe.model.set_value(cdt, cdn, field, undefined);
   }
 };
 
@@ -61,10 +55,25 @@ const validateWarehouse = (cdt, cdn, field) => {
     currentRow.src_warehouse &&
     currentRow.src_warehouse === currentRow.tgt_warehouse
   ) {
-    frappe.model.set_value(cdt, cdn, field, null);
+    frappe.model.set_value(cdt, cdn, field, undefined);
     frappe.throw("Source and target warehouse cannot be the same");
   }
 };
+
+const validateQty = (frm, cdt, cdn) => {
+  if (frappe.get_doc(cdt, cdn).qty <= 0) {
+    frappe.model.set_value(cdt, cdn, "qty", undefined);
+  } else {
+    validateStock(frm, cdt, cdn, "qty");
+  }
+};
+
+const validateRate = (cdt, cdn) => {
+  if (frappe.get_doc(cdt, cdn).rate <= 0) {
+    frappe.model.set_value(cdt, cdn, "rate", undefined);
+  }
+};
+
 const totalOutgoingItemQty = (currentRow, allRows) => {
   let totalQty = 0;
   for (const row of allRows) {
@@ -90,15 +99,14 @@ const getStock = async (item, warehouse) => {
 };
 
 const updateFields = (frm) => {
-  const type = frm.doc.type;
-  if (type === "Consume") {
+  if (frm.doc.type === "Consume") {
     updateWarehouseProperties(frm, "src_warehouse", 1);
     updateWarehouseProperties(frm, "tgt_warehouse", 0);
-    setNullForUnusedWarehouse(frm, "tgt_warehouse");
-  } else if (type === "Receipt") {
+    setUndefinedForUnusedWarehouse(frm, "tgt_warehouse");
+  } else if (frm.doc.type === "Receipt") {
     updateWarehouseProperties(frm, "tgt_warehouse", 1);
     updateWarehouseProperties(frm, "src_warehouse", 0);
-    setNullForUnusedWarehouse(frm, "src_warehouse");
+    setUndefinedForUnusedWarehouse(frm, "src_warehouse");
   } else {
     updateWarehouseProperties(frm, "src_warehouse", 1);
     updateWarehouseProperties(frm, "tgt_warehouse", 1);
@@ -114,8 +122,8 @@ const updateWarehouseProperties = (frm, warehouse, reqd) => {
   );
 };
 
-const setNullForUnusedWarehouse = (frm, field) => {
+const setUndefinedForUnusedWarehouse = (frm, field) => {
   for (const row of frm.doc.items) {
-    frappe.model.set_value("Stock Entry Item", row.name, field, null);
+    frappe.model.set_value("Stock Entry Item", row.name, field, undefined);
   }
 };
