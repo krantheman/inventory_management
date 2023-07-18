@@ -15,3 +15,22 @@ def get_item_stock(item, warehouse):
     ).run(as_dict=True)
     return item_stock[0].value or 0
 
+
+@frappe.whitelist()
+def get_valuation_rate(item, warehouse):
+    entries = frappe.db.get_list(
+        "Stock Ledger Entry",
+        fields=["valuation_rate", "qty_change"],
+        filters={
+            "item": item,
+            "warehouse": warehouse,
+            "qty_change": [">", "0"],
+        },
+    )
+    if len(entries) == 0:
+        return None
+    numerator = denominator = 0
+    for entry in entries:
+        numerator += entry.qty_change * entry.valuation_rate
+        denominator += entry.qty_change
+    return numerator / denominator

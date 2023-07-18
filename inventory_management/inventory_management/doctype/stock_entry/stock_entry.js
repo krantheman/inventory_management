@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Stock Entry", {
-  onload(frm) {
+  onload_post_render(frm) {
     updateFields(frm);
   },
   type(frm) {
@@ -13,13 +13,16 @@ frappe.ui.form.on("Stock Entry", {
 frappe.ui.form.on("Stock Entry Item", {
   item(frm, cdt, cdn) {
     validateStock(frm, cdt, cdn, "item");
+    setValuationRate(frm, cdt, cdn);
   },
   src_warehouse(frm, cdt, cdn) {
     validateWarehouse(cdt, cdn, "src_warehouse");
     validateStock(frm, cdt, cdn, "src_warehouse");
+    setValuationRate(frm, cdt, cdn);
   },
   tgt_warehouse(frm, cdt, cdn) {
     validateWarehouse(cdt, cdn, "tgt_warehouse");
+    if (frm.doc.type === "Receipt") setValuationRate(frm, cdt, cdn);
   },
   qty(frm, cdt, cdn) {
     validateQty(frm, cdt, cdn);
@@ -86,30 +89,21 @@ const totalOutgoingItemQty = (currentRow, allRows) => {
   return totalQty;
 };
 
-const getStock = async (item, warehouse) => {
-  return await frappe
-    .call({
-      method: "inventory_management.inventory_management.utils.get_item_stock",
-      args: {
-        item,
-        warehouse,
-      },
-    })
-    .then((r) => r?.message);
-};
-
 const updateFields = (frm) => {
   if (frm.doc.type === "Consume") {
     updateWarehouseProperties(frm, "src_warehouse", 1);
     updateWarehouseProperties(frm, "tgt_warehouse", 0);
-    setUndefinedForUnusedWarehouse(frm, "tgt_warehouse");
+    updateItemFields(frm, "tgt_warehouse");
+    frm.fields_dict.items.grid.update_docfield_property("rate", "read_only", 1);
   } else if (frm.doc.type === "Receipt") {
     updateWarehouseProperties(frm, "tgt_warehouse", 1);
     updateWarehouseProperties(frm, "src_warehouse", 0);
-    setUndefinedForUnusedWarehouse(frm, "src_warehouse");
+    updateItemFields(frm, "src_warehouse");
+    frm.fields_dict.items.grid.update_docfield_property("rate", "read_only", 0);
   } else {
     updateWarehouseProperties(frm, "src_warehouse", 1);
     updateWarehouseProperties(frm, "tgt_warehouse", 1);
+    frm.fields_dict.items.grid.update_docfield_property("rate", "read_only", 1);
   }
 };
 
@@ -122,8 +116,46 @@ const updateWarehouseProperties = (frm, warehouse, reqd) => {
   );
 };
 
-const setUndefinedForUnusedWarehouse = (frm, field) => {
+const updateItemFields = (frm, field) => {
   for (const row of frm.doc.items) {
     frappe.model.set_value("Stock Entry Item", row.name, field, undefined);
+    if (frm.doc.type === "Receipt")
+      setValuationRate(frm, "Stock Entry Item", row.name);
   }
+};
+
+const setValuationRate = async (frm, cdt, cdn) => {
+  const currentRow = frappe.get_doc(cdt, cdn);
+  const warehouse =
+    frm.doc.type === "Receipt"
+      ? currentRow.tgt_warehouse
+      : currentRow.src_warehouse;
+  if (!(currentRow.item && warehouse)) return;
+  const valuationRate = await getValuationRate(currentRow.item, warehouse);
+  frappe.model.set_value(cdt, cdn, "rate", valuationRate);
+};
+
+const getStock = async (item, warehouse) => {
+  return await frappe
+    .call({
+      method: "inventory_management.inventory_management.utils.get_item_stock",
+      args: {
+        item,
+        warehouse,
+      },
+    })
+    .then((r) => r?.message);
+};
+
+const getValuationRate = async (item, warehouse) => {
+  return await frappe
+    .call({
+      method:
+        "inventory_management.inventory_management.utils.get_valuation_rate",
+      args: {
+        item,
+        warehouse,
+      },
+    })
+    .then((r) => r?.message);
 };
