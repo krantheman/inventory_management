@@ -15,11 +15,3 @@ def get_item_stock(item, warehouse):
     ).run(as_dict=True)
     return item_stock[0].value or 0
 
-
-def validate_item_stock(items):
-    for obj in items:
-        item_stock = get_item_stock(obj["item"], obj["warehouse"])
-        if item_stock < obj["qty"]:
-            frappe.throw(
-                f"There is not enough stock of item {obj['item']} available at {obj['warehouse']} for this operation"
-            )

@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Stock Entry", {
-  refresh(frm) {
+  onload(frm) {
     updateFields(frm);
   },
   type(frm) {
