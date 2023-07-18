@@ -71,7 +71,7 @@ const totalOutgoingItemQty = (currentRow, allRows) => {
 const getStock = async (item, warehouse) => {
   return await frappe
     .call({
-      method: "inventory_management.inventory_management.api.get_item_stock",
+      method: "inventory_management.inventory_management.utils.get_item_stock",
       args: {
         item,
         warehouse,
