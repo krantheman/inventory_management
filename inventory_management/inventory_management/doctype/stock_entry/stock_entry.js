@@ -138,7 +138,7 @@ const setValuationRate = async (frm, cdt, cdn) => {
 const getStock = async (item, warehouse) => {
   return await frappe
     .call({
-      method: "inventory_management.inventory_management.utils.get_item_stock",
+      method: "inventory_management.utils.get_item_stock",
       args: {
         item,
         warehouse,
@@ -151,7 +151,7 @@ const getValuationRate = async (item, warehouse) => {
   return await frappe
     .call({
       method:
-        "inventory_management.inventory_management.utils.get_valuation_rate",
+        "inventory_management.utils.get_valuation_rate",
       args: {
         item,
         warehouse,

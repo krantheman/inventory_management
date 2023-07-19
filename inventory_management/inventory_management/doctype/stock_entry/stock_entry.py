@@ -3,7 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
-from inventory_management.inventory_management.utils import get_item_stock
+from inventory_management.utils import get_item_stock
 
 
 class StockEntry(Document):

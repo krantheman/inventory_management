@@ -12,7 +12,7 @@ class Item(Document):
 
     def after_insert(self):
         if self.is_receipt():
-            self.create_stock_entry()
+            self.create_stock_ledger_entry()
 
     def is_receipt(self):
         return self.opening_warehouse or self.opening_rate or self.opening_qty
@@ -28,20 +28,14 @@ class Item(Document):
                 "Enter valid opening {} for receipt stock entry".format(str_field)
             )
 
-    def create_stock_entry(self):
-        stock_entry = frappe.get_doc(
+    def create_stock_ledger_entry(self):
+        stock_ledger_entry = frappe.get_doc(
             {
-                "doctype": "Stock Entry",
-                "type": "Receipt",
-                "items": [
-                    {
-                        "item": self.name,
-                        "tgt_warehouse": self.opening_warehouse,
-                        "qty": self.opening_qty,
-                        "rate": self.opening_rate,
-                    }
-                ],
+                "doctype": "Stock Ledger Entry",
+                "item": self.name,
+                "warehouse": self.opening_warehouse,
+                "qty_change": self.opening_qty,
+                "valuation_rate": self.opening_rate,
             }
         )
-        stock_entry.insert()
-        stock_entry.submit()
+        stock_ledger_entry.insert()
