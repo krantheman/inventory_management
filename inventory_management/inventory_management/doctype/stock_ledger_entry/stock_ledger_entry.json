@@ -7,12 +7,12 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "date",
+  "time",
   "item",
   "warehouse",
   "qty_change",
-  "valuation_rate",
-  "date",
-  "time"
+  "valuation_rate"
  ],
  "fields": [
   {
@@ -52,7 +52,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-07-13 11:12:49.344515",
+ "modified": "2023-07-19 12:58:29.175500",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Stock Ledger Entry",
