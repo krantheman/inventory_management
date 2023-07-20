@@ -5,7 +5,9 @@ import frappe
 from frappe.query_builder import DocType
 from frappe.query_builder.functions import Sum
 from pypika.terms import Case
-from pypika import Order
+
+
+SLE = DocType("Stock Ledger Entry")
 
 
 def execute(filters=None):
@@ -61,14 +63,28 @@ def execute(filters=None):
         },
     ]
 
-    data = query().run(as_dict=True)
+    query = frappe.qb.from_(SLE)
+    query = add_filters(query, filters)
+    query = update_query(query)
+    data = query.run(as_dict=True)
     format_data(data)
 
     return map(lambda x: {**x, "width": 134}, columns), data
 
 
-def query():
-    SLE = DocType("Stock Ledger Entry")
+def add_filters(query, filters):
+    if filters.from_date:
+        query = query.where(SLE.date >= filters.from_date)
+    if filters.to_date:
+        query = query.where(SLE.date <= filters.to_date)
+    if filters.item:
+        query = query.where(SLE.item == filters.item)
+    if filters.warehouse:
+        query = query.where(SLE.warehouse == filters.warehouse)
+    return query
+
+
+def update_query(query):
     in_qty = Case().when(SLE.qty_change > 0, SLE.qty_change).else_(0)
     out_qty = Case().when(SLE.qty_change < 0, SLE.qty_change).else_(0)
     in_value = (
@@ -87,20 +103,16 @@ def query():
         )
         .else_(0)
     )
-    return (
-        frappe.qb.from_("Stock Ledger Entry")
-        .groupby(SLE.item, SLE.warehouse)
-        .select(
-            SLE.item,
-            SLE.warehouse,
-            Sum(SLE.qty_change).as_("balance_qty"),
-            Sum(SLE.qty_change * SLE.valuation_rate).as_("balance_value"),
-            Sum(in_qty).as_("in_qty"),
-            Sum(in_value).as_("in_value"),
-            Sum(out_qty).as_("out_qty"),
-            Sum(out_value).as_("out_value"),
-            SLE.valuation_rate,
-        )
+    return query.groupby(SLE.item, SLE.warehouse).select(
+        SLE.item,
+        SLE.warehouse,
+        Sum(SLE.qty_change).as_("balance_qty"),
+        Sum(SLE.qty_change * SLE.valuation_rate).as_("balance_value"),
+        Sum(in_qty).as_("in_qty"),
+        Sum(in_value).as_("in_value"),
+        Sum(out_qty).as_("out_qty"),
+        Sum(out_value).as_("out_value"),
+        SLE.valuation_rate,
     )
 
 
