@@ -16,6 +16,7 @@ def get_item_stock(item, warehouse):
     return item_stock[0].value or 0
 
 
+#TODO: write better query
 @frappe.whitelist()
 def get_valuation_rate(item, warehouse):
     entries = frappe.db.get_list(
