@@ -23,7 +23,7 @@ class StockEntryItem(Document):
                 self._create_stock_ledger_entry(self.src_warehouse, self.qty)
 
     def _create_stock_ledger_entry(self, warehouse, qty_change):
-        ledger_entry = frappe.get_doc(
+        stock_ledger_entry = frappe.get_doc(
             {
                 "doctype": "Stock Ledger Entry",
                 "item": self.item,
@@ -32,4 +32,4 @@ class StockEntryItem(Document):
                 "valuation_rate": self.rate,
             }
         )
-        ledger_entry.insert()
+        stock_ledger_entry.insert()

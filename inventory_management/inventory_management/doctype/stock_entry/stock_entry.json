@@ -7,9 +7,11 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "stock_entry_section",
   "date",
   "time",
   "type",
+  "section_break_b9ws",
   "items",
   "amended_from"
  ],
@@ -49,12 +51,21 @@
    "label": "Items",
    "options": "Stock Entry Item",
    "reqd": 1
+  },
+  {
+   "fieldname": "stock_entry_section",
+   "fieldtype": "Section Break",
+   "label": "Stock Entry"
+  },
+  {
+   "fieldname": "section_break_b9ws",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-07-18 12:38:36.339104",
+ "modified": "2023-07-21 12:56:05.543548",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Stock Entry",

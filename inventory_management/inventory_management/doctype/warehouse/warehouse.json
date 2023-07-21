@@ -6,9 +6,11 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "warehouse_section",
   "title",
   "contact",
   "location",
+  "section_break_hkmv",
   "lft",
   "rgt",
   "is_group",
@@ -67,12 +69,22 @@
    "fieldtype": "Link",
    "label": "Parent Warehouse",
    "options": "Warehouse"
+  },
+  {
+   "fieldname": "section_break_hkmv",
+   "fieldtype": "Section Break",
+   "label": "Group"
+  },
+  {
+   "fieldname": "warehouse_section",
+   "fieldtype": "Section Break",
+   "label": "Warehouse"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2023-07-12 13:51:37.565375",
+ "modified": "2023-07-21 12:41:19.100827",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Warehouse",

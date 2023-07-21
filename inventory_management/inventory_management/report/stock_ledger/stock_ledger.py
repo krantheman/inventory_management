@@ -72,7 +72,7 @@ def format_data(data):
     balance_qty = {}
     balance_value = {}
     for row in data:
-        row.time = str(row.time).split(".")[0]  # remove milliseconds
+        format_time(row)
         row.value_change = row.qty_change * row.valuation_rate
         key = f"{row.item}-{row.warehouse}"
         if key in balance_qty:
@@ -83,27 +83,50 @@ def format_data(data):
             balance_value[key] = row.value_change
         row.balance_qty = balance_qty[key]
         row.balance_value = balance_value[key]
-        # Format to two decimal places
-        row.valuation_rate = "{:.2f}".format(row.valuation_rate)
-        row.value_change = "{:.2f}".format(row.value_change)
-        row.balance_value = "{:.2f}".format(row.balance_value)
+        format_decimals(row)
 
 
 def format_filters(filters):
+    applied_filters = {}
+    add_date_filter(applied_filters, filters)
+    add_item_filter(applied_filters, filters)
+    add_warehouse_filter(applied_filters, filters)
+    add_type_filter(applied_filters, filters)
+    return applied_filters
+
+
+def add_date_filter(applied_filters, filters):
     from_date = "1900-01-01"
     to_date = "2100-01-01"
-    applied_filters = {}
     if filters.from_date:
         from_date = filters.from_date
     if filters.to_date:
         to_date = filters.to_date
     applied_filters["date"] = ["between", [from_date, to_date]]
+
+
+def add_item_filter(applied_filters, filters):
     if filters.item:
         applied_filters["item"] = filters.item
+
+
+def add_warehouse_filter(applied_filters, filters):
     if filters.warehouse:
         applied_filters["warehouse"] = filters.warehouse
+
+
+def add_type_filter(applied_filters, filters):
     if filters.type == "Incoming":
         applied_filters["qty_change"] = [">", 0]
     elif filters.type == "Outgoing":
         applied_filters["qty_change"] = ["<", 0]
-    return applied_filters
+
+
+def format_time(entry):
+    entry.time = str(entry.time).split(".")[0]  # remove milliseconds
+
+
+def format_decimals(entry):
+    entry.valuation_rate = "{:.2f}".format(entry.valuation_rate)
+    entry.value_change = "{:.2f}".format(entry.value_change)
+    entry.balance_value = "{:.2f}".format(entry.balance_value)

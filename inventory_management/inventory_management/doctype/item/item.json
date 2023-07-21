@@ -8,9 +8,11 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "item_section",
   "code",
   "title",
   "description",
+  "section_break_ohrx",
   "opening_warehouse",
   "opening_qty",
   "opening_rate"
@@ -29,8 +31,7 @@
    "fieldname": "title",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Title",
-   "reqd": 1
+   "label": "Title"
   },
   {
    "fieldname": "description",
@@ -57,11 +58,21 @@
    "label": "Opening Valuation Rate",
    "non_negative": 1,
    "set_only_once": 1
+  },
+  {
+   "fieldname": "item_section",
+   "fieldtype": "Section Break",
+   "label": "Item"
+  },
+  {
+   "fieldname": "section_break_ohrx",
+   "fieldtype": "Section Break",
+   "label": "Opening"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-07-12 15:02:33.612288",
+ "modified": "2023-07-21 12:49:39.229734",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Item",
