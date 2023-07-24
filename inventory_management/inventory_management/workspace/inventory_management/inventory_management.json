@@ -1,0 +1,74 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"XrZ-vpw_Iz\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Inventory Management</b></span>\",\"col\":12}},{\"id\":\"5Hf_dohzCg\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Warehouse\",\"col\":4}},{\"id\":\"3qrsYFsSpT\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Item\",\"col\":4}},{\"id\":\"-EDzC72nRL\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Stock Entry\",\"col\":4}},{\"id\":\"qJooQ1XbgD\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Stock Ledger Entry\",\"col\":4}},{\"id\":\"CtR9OaLDtx\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
+ "creation": "2023-07-24 15:58:16.946266",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "stock",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Inventory Management",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 2,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Stock Ledger",
+   "link_count": 0,
+   "link_to": "Stock Ledger",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Stock Balance",
+   "link_count": 0,
+   "link_to": "Stock Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2023-07-24 16:31:57.949817",
+ "modified_by": "Administrator",
+ "module": "Inventory Management",
+ "name": "Inventory Management",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [
+  {
+   "document_type": "Warehouse",
+   "label": "Warehouse"
+  },
+  {
+   "document_type": "Stock Ledger Entry",
+   "label": "Stock Ledger Entry"
+  },
+  {
+   "document_type": "Item",
+   "label": "Item"
+  },
+  {
+   "document_type": "Stock Entry",
+   "label": "Stock Entry"
+  }
+ ],
+ "roles": [],
+ "sequence_id": 6.0,
+ "shortcuts": [],
+ "title": "Inventory Management"
+}
