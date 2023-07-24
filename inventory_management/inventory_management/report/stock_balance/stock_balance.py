@@ -3,7 +3,7 @@
 
 import frappe
 from frappe.query_builder import DocType
-from frappe.query_builder.functions import Sum
+from frappe.query_builder.functions import Sum, Max, Concat
 from pypika.terms import Case
 
 
@@ -85,9 +85,55 @@ def add_filters(query, filters):
 
 
 def update_query(query):
-    in_qty = Case().when(SLE.qty_change > 0, SLE.qty_change).else_(0)
-    out_qty = Case().when(SLE.qty_change < 0, SLE.qty_change).else_(0)
-    in_value = (
+    latest_date_query = (
+        frappe.qb.from_(SLE)
+        .select(
+            SLE.item,
+            SLE.warehouse,
+            Max(Concat(SLE.date, " ", SLE.time)).as_("date_time"),
+        )
+        .groupby(SLE.item, SLE.warehouse)
+    )
+
+    latest_valuation_rate_query = (
+        frappe.qb.from_(SLE)
+        .inner_join(latest_date_query)
+        .on(
+            SLE.item == latest_date_query.item
+            and SLE.warehouse == latest_date_query.warehouse
+            and Concat(SLE.date, " ", SLE.time) == latest_date_query.date_time
+        )
+        .select(SLE.item, SLE.warehouse, SLE.valuation_rate)
+    )
+
+    return (
+        query.groupby(SLE.item, SLE.warehouse)
+        .left_join(latest_valuation_rate_query)
+        .on_field("item", "warehouse")
+        .select(
+            SLE.item,
+            SLE.warehouse,
+            Sum(SLE.qty_change).as_("balance_qty"),
+            Sum(SLE.qty_change * SLE.valuation_rate).as_("balance_value"),
+            Sum(in_qty()).as_("in_qty"),
+            Sum(in_value()).as_("in_value"),
+            Sum(out_qty()).as_("out_qty"),
+            Sum(out_value()).as_("out_value"),
+            latest_valuation_rate_query.valuation_rate,
+        )
+    )
+
+
+def in_qty():
+    return Case().when(SLE.qty_change > 0, SLE.qty_change).else_(0)
+
+
+def out_qty():
+    return Case().when(SLE.qty_change < 0, SLE.qty_change).else_(0)
+
+
+def in_value():
+    return (
         Case()
         .when(
             SLE.qty_change > 0,
@@ -95,24 +141,16 @@ def update_query(query):
         )
         .else_(0)
     )
-    out_value = (
+
+
+def out_value():
+    return (
         Case()
         .when(
             SLE.qty_change < 0,
             SLE.qty_change * SLE.valuation_rate,
         )
         .else_(0)
-    )
-    return query.groupby(SLE.item, SLE.warehouse).select(
-        SLE.item,
-        SLE.warehouse,
-        Sum(SLE.qty_change).as_("balance_qty"),
-        Sum(SLE.qty_change * SLE.valuation_rate).as_("balance_value"),
-        Sum(in_qty).as_("in_qty"),
-        Sum(in_value).as_("in_value"),
-        Sum(out_qty).as_("out_qty"),
-        Sum(out_value).as_("out_value"),
-        SLE.valuation_rate,
     )
 
 
