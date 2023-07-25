@@ -40,12 +40,14 @@
   {
    "fieldname": "src_warehouse",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Source Warehouse",
    "options": "Warehouse"
   },
   {
    "fieldname": "tgt_warehouse",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Target Warehouse",
    "options": "Warehouse"
   }
@@ -53,7 +55,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2023-07-18 12:20:09.344963",
+ "modified": "2023-07-25 16:57:02.034767",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Stock Entry Item",
