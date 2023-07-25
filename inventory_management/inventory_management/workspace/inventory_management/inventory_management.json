@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"XrZ-vpw_Iz\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Inventory Management</b></span>\",\"col\":12}},{\"id\":\"4PwB4UvQAK\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Doctype\",\"col\":4}},{\"id\":\"5Hf_dohzCg\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Warehouse\",\"col\":4}},{\"id\":\"3qrsYFsSpT\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Item\",\"col\":4}},{\"id\":\"-EDzC72nRL\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Stock Entry\",\"col\":4}},{\"id\":\"qJooQ1XbgD\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Stock Ledger Entry\",\"col\":4}},{\"id\":\"CtR9OaLDtx\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
+ "content": "[{\"id\":\"XrZ-vpw_Iz\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px;\\\"><b>Shortcuts</b></span>\",\"col\":12}},{\"id\":\"3r8jiE3iGv\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Warehouse\",\"col\":3}},{\"id\":\"YA1fBUDgeA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Item\",\"col\":3}},{\"id\":\"FhnUw2Bs9z\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Stock Entry\",\"col\":3}},{\"id\":\"rtzk-Des1z\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ZB4nKtPrmk\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px;\\\"><b>Lists and Reports</b></span>\",\"col\":12}},{\"id\":\"H-J4jddieD\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":4}},{\"id\":\"K2MGjmt-Ov\",\"type\":\"card\",\"data\":{\"card_name\":\"Transactions\",\"col\":4}},{\"id\":\"CtR9OaLDtx\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
  "creation": "2023-07-24 15:58:16.946266",
  "custom_blocks": [],
  "docstatus": 0,
@@ -39,9 +39,55 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Masters",
+   "link_count": 2,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Warehouse List",
+   "link_count": 0,
+   "link_to": "Warehouse",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Item List",
+   "link_count": 0,
+   "link_to": "Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Transactions",
+   "link_count": 1,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Stock Entry List",
+   "link_count": 0,
+   "link_to": "Stock Entry",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2023-07-24 16:37:00.877622",
+ "modified": "2023-07-25 14:11:26.916337",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Inventory Management",
@@ -49,31 +95,31 @@
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
- "quick_lists": [
-  {
-   "document_type": "Warehouse",
-   "label": "Warehouse"
-  },
-  {
-   "document_type": "Stock Ledger Entry",
-   "label": "Stock Ledger Entry"
-  },
-  {
-   "document_type": "DocType",
-   "label": "Doctype",
-   "quick_list_filter": "{\"module\":[\"=\",\"Inventory Management\"]}"
-  },
-  {
-   "document_type": "Item",
-   "label": "Item"
-  },
-  {
-   "document_type": "Stock Entry",
-   "label": "Stock Entry"
-  }
- ],
+ "quick_lists": [],
  "roles": [],
  "sequence_id": 6.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "New Warehouse",
+   "link_to": "Warehouse",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "New Item",
+   "link_to": "Item",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "New Stock Entry",
+   "link_to": "Stock Entry",
+   "type": "DocType"
+  }
+ ],
  "title": "Inventory Management"
 }
