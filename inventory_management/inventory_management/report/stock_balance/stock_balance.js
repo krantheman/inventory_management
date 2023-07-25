@@ -30,7 +30,6 @@ frappe.query_reports["Stock Balance"] = {
   formatter: (value, row, column, data, default_formatter) => {
     if (
       value &&
-      value != "0.00" &&
       (column.fieldname === "in_qty" ||
         column.fieldname === "in_value" ||
         column.fieldname === "out_qty" ||

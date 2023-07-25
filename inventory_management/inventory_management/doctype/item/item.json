@@ -34,7 +34,8 @@
    "fieldname": "title",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Item Name"
+   "label": "Item Name",
+   "reqd": 1
   },
   {
    "fieldname": "description",
@@ -89,7 +90,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-07-25 15:30:56.380654",
+ "modified": "2023-07-25 17:07:54.441506",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Item",

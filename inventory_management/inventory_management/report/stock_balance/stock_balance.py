@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe.utils import flt
 from frappe.query_builder import DocType
 from frappe.query_builder.functions import Sum, Max, Concat
 from pypika.terms import Case
@@ -157,7 +158,7 @@ def out_value():
 def format_data(data):
     for row in data:
         # Format to two decimal places
-        row.balance_value = "{:.2f}".format(row.balance_value)
-        row.in_value = "{:.2f}".format(row.in_value)
-        row.out_value = "{:.2f}".format(row.out_value)
-        row.valuation_rate = "{:.2f}".format(row.valuation_rate)
+        row.balance_value = flt(row.balance_value, 2)
+        row.in_value = flt(row.in_value, 2)
+        row.out_value = flt(row.out_value, 2)
+        row.valuation_rate = flt(row.valuation_rate, 2)

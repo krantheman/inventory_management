@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe.utils import flt
 
 
 def execute(filters=None):
@@ -127,6 +128,6 @@ def format_time(entry):
 
 
 def format_decimals(entry):
-    entry.valuation_rate = "{:.2f}".format(entry.valuation_rate)
-    entry.value_change = "{:.2f}".format(entry.value_change)
-    entry.balance_value = "{:.2f}".format(entry.balance_value)
+    entry.valuation_rate = flt(entry.valuation_rate, 2)
+    entry.value_change = flt(entry.value_change, 2)
+    entry.balance_value = flt(entry.balance_value, 2)
