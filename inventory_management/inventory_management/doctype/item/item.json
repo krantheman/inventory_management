@@ -10,19 +10,22 @@
  "field_order": [
   "item_section",
   "code",
+  "column_break_n4qb",
   "title",
-  "description",
-  "section_break_ohrx",
+  "section_break_6dfo",
   "opening_warehouse",
   "opening_qty",
-  "opening_rate"
+  "column_break_zzlm",
+  "opening_rate",
+  "description_section",
+  "description"
  ],
  "fields": [
   {
    "fieldname": "code",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Code",
+   "label": "Item Code",
    "non_negative": 1,
    "reqd": 1,
    "unique": 1
@@ -31,12 +34,12 @@
    "fieldname": "title",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Title"
+   "label": "Item Name"
   },
   {
    "fieldname": "description",
    "fieldtype": "Text Editor",
-   "label": "Description"
+   "label": "Item Description"
   },
   {
    "fieldname": "opening_warehouse",
@@ -65,14 +68,28 @@
    "label": "Item"
   },
   {
-   "fieldname": "section_break_ohrx",
+   "collapsible": 1,
+   "fieldname": "description_section",
+   "fieldtype": "Section Break",
+   "label": "Description"
+  },
+  {
+   "fieldname": "column_break_n4qb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_6dfo",
    "fieldtype": "Section Break",
    "label": "Opening"
+  },
+  {
+   "fieldname": "column_break_zzlm",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-07-21 12:49:39.229734",
+ "modified": "2023-07-25 15:30:56.380654",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Item",

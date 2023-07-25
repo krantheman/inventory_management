@@ -9,32 +9,33 @@
   "warehouse_section",
   "title",
   "contact",
+  "column_break_mpb8",
   "location",
-  "section_break_hkmv",
   "lft",
   "rgt",
+  "section_break_hkmv",
   "is_group",
-  "old_parent",
-  "parent_warehouse"
+  "parent_warehouse",
+  "old_parent"
  ],
  "fields": [
   {
    "fieldname": "title",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Title",
+   "label": "Warehouse Name",
    "reqd": 1,
    "unique": 1
   },
   {
    "fieldname": "contact",
    "fieldtype": "Data",
-   "label": "Contact"
+   "label": "Warehouse Contact"
   },
   {
    "fieldname": "location",
    "fieldtype": "Data",
-   "label": "Location"
+   "label": "Warehouse Location"
   },
   {
    "fieldname": "lft",
@@ -56,11 +57,12 @@
    "default": "0",
    "fieldname": "is_group",
    "fieldtype": "Check",
-   "label": "Is Group"
+   "label": "Is Parent Warehouse"
   },
   {
    "fieldname": "old_parent",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Old Parent",
    "options": "Warehouse"
   },
@@ -79,12 +81,16 @@
    "fieldname": "warehouse_section",
    "fieldtype": "Section Break",
    "label": "Warehouse"
+  },
+  {
+   "fieldname": "column_break_mpb8",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2023-07-21 12:41:19.100827",
+ "modified": "2023-07-25 15:38:43.818156",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Warehouse",
