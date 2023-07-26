@@ -68,7 +68,7 @@ def execute(filters=None):
     query = add_filters(query, filters)
     query = update_query(query)
     data = query.run(as_dict=True)
-    format_data(data)
+    format_decimals(data)
 
     return map(lambda x: {**x, "width": 134}, columns), data
 
@@ -155,9 +155,8 @@ def out_value():
     )
 
 
-def format_data(data):
+def format_decimals(data):
     for row in data:
-        # Format to two decimal places
         row.balance_value = flt(row.balance_value, 2)
         row.in_value = flt(row.in_value, 2)
         row.out_value = flt(row.out_value, 2)
