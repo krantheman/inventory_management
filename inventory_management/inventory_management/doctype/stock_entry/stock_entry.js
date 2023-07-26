@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Stock Entry", {
-  onload_post_render(frm) {
+  setup(frm) {
     updateFields(frm);
   },
   type(frm) {
@@ -119,8 +119,6 @@ const updateWarehouseProperties = (frm, warehouse, reqd) => {
 const updateItemFields = (frm, field) => {
   for (const row of frm.doc.items) {
     frappe.model.set_value("Stock Entry Item", row.name, field, undefined);
-    if (frm.doc.type === "Receipt")
-      setValuationRate(frm, "Stock Entry Item", row.name);
   }
 };
 
@@ -150,8 +148,7 @@ const getStock = async (item, warehouse) => {
 const getValuationRate = async (item, warehouse) => {
   return await frappe
     .call({
-      method:
-        "inventory_management.utils.get_valuation_rate",
+      method: "inventory_management.utils.get_valuation_rate",
       args: {
         item,
         warehouse,

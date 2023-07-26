@@ -2,6 +2,8 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe.query_builder import DocType
+from frappe.query_builder.functions import Sum
 from frappe.model.document import Document
 from inventory_management.utils import get_item_stock
 
@@ -98,7 +100,10 @@ def create_stock_ledger_entry(item, rate, warehouse, qty_change):
             "item": item,
             "warehouse": warehouse,
             "qty_change": qty_change,
-            "valuation_rate": rate,
+            "in_out_rate": rate,
+            "valuation_rate": calculate_valuation_rate(
+                item, rate, warehouse, qty_change
+            ),
         }
     )
     stock_ledger_entry.insert()
@@ -126,3 +131,22 @@ def validate_receipt(item):
 def validate_value(value, text):
     if value <= 0:
         frappe.throw_("{0} must be greater than zero".format(text))
+
+
+def calculate_valuation_rate(item, rate, warehouse, qty_change):
+    SLE = DocType("Stock Ledger Entry")
+    old_valuation_rate = (
+        frappe.qb.from_(SLE)
+        .where((SLE.item == item) & (SLE.warehouse == warehouse))
+        .select(
+            Sum(SLE.qty_change * SLE.valuation_rate).as_("balance_value"),
+            Sum(SLE.qty_change).as_("total_qty_change"),
+        )
+    ).run(as_dict=True)[0]
+    if not old_valuation_rate.balance_value:
+        old_valuation_rate.balance_value = 0
+        old_valuation_rate.total_qty_change = 0
+    new_valuation_rate = (old_valuation_rate.balance_value + rate * qty_change) / (
+        old_valuation_rate.total_qty_change + qty_change
+    )
+    return new_valuation_rate

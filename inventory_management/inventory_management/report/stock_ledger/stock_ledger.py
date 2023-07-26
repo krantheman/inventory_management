@@ -39,6 +39,12 @@ def execute(filters=None):
             "options": "Balance Quantity",
         },
         {
+            "fieldname": "in_out_rate",
+            "label": "In/Out Rate",
+            "fieldtype": "float",
+            "options": "In/Out Rate",
+        },
+        {
             "fieldname": "valuation_rate",
             "label": "Valuation Rate",
             "fieldtype": "float",
@@ -60,13 +66,21 @@ def execute(filters=None):
 
     data = frappe.db.get_all(
         "Stock Ledger Entry",
-        ["date", "time", "item", "warehouse", "qty_change", "valuation_rate"],
-        order_by="date",
+        [
+            "date",
+            "time",
+            "item",
+            "warehouse",
+            "qty_change",
+            "in_out_rate",
+            "valuation_rate",
+        ],
+        order_by="creation",
         filters=format_filters(filters),
     )
     format_data(data)
 
-    return map(lambda x: {**x, "width": 134}, columns), data
+    return map(lambda x: {**x, "width": 121}, columns), data
 
 
 def format_data(data):
