@@ -31,8 +31,10 @@ class StockEntry(Document):
             validate_transfer(d)
             validate_value(d.qty, "Quantity")
             validate_value(d.rate, "Rate")
-            create_stock_ledger_entry(d.item, d.rate, d.src_warehouse, -abs(d.qty))
-            create_stock_ledger_entry(d.item, d.rate, d.tgt_warehouse, d.qty)
+            create_stock_ledger_entry(
+                self.name, d.item, d.rate, d.src_warehouse, -abs(d.qty)
+            )
+            create_stock_ledger_entry(self.name, d.item, d.rate, d.tgt_warehouse, d.qty)
 
     def submit_consume(self):
         self.validate_item_stock()
@@ -41,7 +43,9 @@ class StockEntry(Document):
             validate_value(d.qty, "Quantity")
             validate_value(d.rate, "Rate")
             d.tgt_warehouse = None
-            create_stock_ledger_entry(d.item, d.rate, d.src_warehouse, -abs(d.qty))
+            create_stock_ledger_entry(
+                self.name, d.item, d.rate, d.src_warehouse, -abs(d.qty)
+            )
 
     def submit_receipt(self):
         for d in self.items:
@@ -49,22 +53,26 @@ class StockEntry(Document):
             validate_value(d.qty, "Quantity")
             validate_value(d.rate, "Rate")
             d.src_warehouse = None
-            create_stock_ledger_entry(d.item, d.rate, d.tgt_warehouse, d.qty)
+            create_stock_ledger_entry(self.name, d.item, d.rate, d.tgt_warehouse, d.qty)
 
     def cancel_transfer(self):
         self.validate_item_stock(is_cancel=True)
         for d in self.items:
-            create_stock_ledger_entry(d.item, d.rate, d.tgt_warehouse, -abs(d.qty))
-            create_stock_ledger_entry(d.item, d.rate, d.src_warehouse, d.qty)
+            create_stock_ledger_entry(
+                self.name, d.item, d.rate, d.tgt_warehouse, -abs(d.qty)
+            )
+            create_stock_ledger_entry(self.name, d.item, d.rate, d.src_warehouse, d.qty)
 
     def cancel_consume(self):
         for d in self.items:
-            create_stock_ledger_entry(d.item, d.rate, d.src_warehouse, d.qty)
+            create_stock_ledger_entry(self.name, d.item, d.rate, d.src_warehouse, d.qty)
 
     def cancel_receipt(self):
         self.validate_item_stock(is_cancel=True)
         for d in self.items:
-            create_stock_ledger_entry(d.item, d.rate, d.tgt_warehouse, -abs(d.qty))
+            create_stock_ledger_entry(
+                self.name, d.item, d.rate, d.tgt_warehouse, -abs(d.qty)
+            )
 
     def group_items_by_warehouse(self, is_tgt_warehouse):
         grouped = {}
@@ -93,7 +101,7 @@ class StockEntry(Document):
                 )
 
 
-def create_stock_ledger_entry(item, rate, warehouse, qty_change):
+def create_stock_ledger_entry(stock_entry, item, rate, warehouse, qty_change):
     stock_ledger_entry = frappe.get_doc(
         {
             "doctype": "Stock Ledger Entry",
@@ -104,6 +112,7 @@ def create_stock_ledger_entry(item, rate, warehouse, qty_change):
             "valuation_rate": calculate_valuation_rate(
                 item, rate, warehouse, qty_change
             ),
+            "stock_entry": stock_entry,
         }
     )
     stock_ledger_entry.insert()

@@ -2,6 +2,9 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Stock Entry", {
+  refresh(frm) {
+    addStockLedgerButton(frm);
+  },
   setup(frm) {
     updateFields(frm);
   },
@@ -172,4 +175,15 @@ const getDefaultWarehouse = async (item) => {
       args: { item },
     })
     .then((r) => r?.message);
+};
+
+const addStockLedgerButton = (frm) => {
+  if (frm.doc.docstatus)
+    frm.add_custom_button(__("View in Stock Ledger"), () => {
+      frappe.set_route([
+        "query-report",
+        "Stock Ledger",
+        { stock_entry: frm.docname },
+      ]);
+    });
 };

@@ -32,6 +32,12 @@ frappe.query_reports["Stock Ledger"] = {
       fieldtype: "Select",
       options: ["", "Incoming", "Outgoing"],
     },
+    {
+      fieldname: "stock_entry",
+      label: __("Stock Entry"),
+      fieldtype: "Link",
+      options: "Stock Entry",
+    },
   ],
   formatter: (value, row, column, data, default_formatter) => {
     if (

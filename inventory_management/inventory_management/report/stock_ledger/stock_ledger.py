@@ -74,6 +74,7 @@ def execute(filters=None):
             "qty_change",
             "in_out_rate",
             "valuation_rate",
+            "stock_entry",
         ],
         order_by="creation",
         filters=format_filters(filters),
@@ -107,6 +108,7 @@ def format_filters(filters):
     add_item_filter(applied_filters, filters)
     add_warehouse_filter(applied_filters, filters)
     add_type_filter(applied_filters, filters)
+    add_stock_entry_filter(applied_filters, filters)
     return applied_filters
 
 
@@ -135,6 +137,11 @@ def add_type_filter(applied_filters, filters):
         applied_filters["qty_change"] = [">", 0]
     elif filters.type == "Outgoing":
         applied_filters["qty_change"] = ["<", 0]
+
+
+def add_stock_entry_filter(applied_filters, filters):
+    if filters.stock_entry:
+        applied_filters["stock_entry"] = filters.stock_entry
 
 
 def format_time(entry):

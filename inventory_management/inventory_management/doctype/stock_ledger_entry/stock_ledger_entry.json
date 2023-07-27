@@ -13,7 +13,8 @@
   "warehouse",
   "qty_change",
   "in_out_rate",
-  "valuation_rate"
+  "valuation_rate",
+  "stock_entry"
  ],
  "fields": [
   {
@@ -54,11 +55,17 @@
    "fieldname": "in_out_rate",
    "fieldtype": "Float",
    "label": "In/Out Rate"
+  },
+  {
+   "fieldname": "stock_entry",
+   "fieldtype": "Link",
+   "label": "Stock Entry ",
+   "options": "Stock Entry"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-07-26 15:16:55.317105",
+ "modified": "2023-07-27 12:11:40.571898",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Stock Ledger Entry",
