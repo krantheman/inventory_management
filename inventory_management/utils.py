@@ -20,3 +20,8 @@ def get_valuation_rate(item, warehouse):
         "Stock Ledger Entry", filters={"item": item, "warehouse": warehouse}
     )
     return doc.valuation_rate if doc else 0
+
+
+@frappe.whitelist()
+def get_default_warehouse(item):
+    return frappe.db.get_value("Item", item, "default_warehouse")

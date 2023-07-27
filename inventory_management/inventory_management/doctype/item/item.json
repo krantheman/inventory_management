@@ -10,8 +10,9 @@
  "field_order": [
   "item_section",
   "code",
-  "column_break_n4qb",
   "title",
+  "column_break_n4qb",
+  "default_warehouse",
   "section_break_6dfo",
   "opening_warehouse",
   "opening_qty",
@@ -86,11 +87,17 @@
   {
    "fieldname": "column_break_zzlm",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "default_warehouse",
+   "fieldtype": "Link",
+   "label": "Default Warehouse",
+   "options": "Warehouse"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-07-26 21:24:21.948750",
+ "modified": "2023-07-27 11:39:03.890718",
  "modified_by": "Administrator",
  "module": "Inventory Management",
  "name": "Item",

@@ -12,6 +12,7 @@ frappe.ui.form.on("Stock Entry", {
 
 frappe.ui.form.on("Stock Entry Item", {
   item(frm, cdt, cdn) {
+    if (frm.doc.type === "Receipt") setDefaultWarehouse(frm, cdt, cdn);
     validateStock(frm, cdt, cdn, "item");
     setValuationRate(frm, cdt, cdn);
   },
@@ -133,6 +134,13 @@ const setValuationRate = async (frm, cdt, cdn) => {
   frappe.model.set_value(cdt, cdn, "rate", valuationRate);
 };
 
+const setDefaultWarehouse = async (frm, cdt, cdn) => {
+  const currentRow = frappe.get_doc(cdt, cdn);
+  if (currentRow.tgt_warehouse) return;
+  const defaultWarehouse = await getDefaultWarehouse(currentRow.item);
+  frappe.model.set_value(cdt, cdn, "tgt_warehouse", defaultWarehouse);
+};
+
 const getStock = async (item, warehouse) => {
   return await frappe
     .call({
@@ -153,6 +161,15 @@ const getValuationRate = async (item, warehouse) => {
         item,
         warehouse,
       },
+    })
+    .then((r) => r?.message);
+};
+
+const getDefaultWarehouse = async (item) => {
+  return await frappe
+    .call({
+      method: "inventory_management.utils.get_default_warehouse",
+      args: { item },
     })
     .then((r) => r?.message);
 };
