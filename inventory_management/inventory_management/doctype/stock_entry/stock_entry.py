@@ -148,14 +148,14 @@ def calculate_valuation_rate(item, rate, warehouse, qty_change):
         frappe.qb.from_(SLE)
         .where((SLE.item == item) & (SLE.warehouse == warehouse))
         .select(
-            Sum(SLE.qty_change * SLE.valuation_rate).as_("balance_value"),
+            Sum(SLE.qty_change * SLE.in_out_rate).as_("balance_value"),
             Sum(SLE.qty_change).as_("total_qty_change"),
         )
     ).run(as_dict=True)[0]
     if not old_valuation_rate.balance_value:
         old_valuation_rate.balance_value = 0
         old_valuation_rate.total_qty_change = 0
-    new_valuation_rate = (old_valuation_rate.balance_value + rate * qty_change) / (
-        old_valuation_rate.total_qty_change + qty_change
-    )
+    numerator = old_valuation_rate.balance_value + rate * qty_change
+    denominator = old_valuation_rate.total_qty_change + qty_change
+    new_valuation_rate = numerator / denominator if denominator else 0
     return new_valuation_rate
