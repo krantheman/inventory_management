@@ -113,24 +113,19 @@ class TestStockEntry(FrappeTestCase):
         frappe.set_user("Administrator")
 
     def test_stock_entry(self):
-        receipt_entry = submit_receipt(5, 40)
-        sle = frappe.get_last_doc(
-            "Stock Ledger Entry", filters={"stock_entry": receipt_entry.name}
-        )
+        # Test submission
+        first_receipt_entry = submit_receipt(5, 40)
+        sle = frappe.get_last_doc("Stock Ledger Entry")
         self.assertEqual(sle.valuation_rate, 45)
         self.assertEqual(sle.qty_change, 5)
 
         consume_entry = submit_consume(2)
-        sle = frappe.get_last_doc(
-            "Stock Ledger Entry", filters={"stock_entry": consume_entry.name}
-        )
+        sle = frappe.get_last_doc("Stock Ledger Entry")
         self.assertEqual(sle.valuation_rate, 45)
         self.assertEqual(sle.qty_change, -2)
 
-        receipt_entry = submit_receipt(2, 60)
-        sle = frappe.get_last_doc(
-            "Stock Ledger Entry", filters={"stock_entry": receipt_entry.name}
-        )
+        second_receipt_entry = submit_receipt(2, 60)
+        sle = frappe.get_last_doc("Stock Ledger Entry")
         self.assertEqual(sle.valuation_rate, 48)
         self.assertEqual(sle.qty_change, 2)
 
@@ -144,3 +139,25 @@ class TestStockEntry(FrappeTestCase):
         self.assertEqual(sle[0].qty_change, 3)
         self.assertEqual(sle[1].valuation_rate, 48)
         self.assertEqual(sle[1].qty_change, -3)
+
+        # Test cancellation
+        first_receipt_entry = submit_receipt(5, 40)
+        transfer_entry.cancel()
+        sle = frappe.get_last_doc("Stock Ledger Entry")
+        self.assertEqual(sle.valuation_rate, 48)
+        self.assertEqual(sle.qty_change, 2)
+
+        second_receipt_entry.cancel()
+        sle = frappe.get_last_doc("Stock Ledger Entry")
+        self.assertEqual(sle.valuation_rate, 45)
+        self.assertEqual(sle.qty_change, -2)
+
+        consume_entry.cancel()
+        sle = frappe.get_last_doc("Stock Ledger Entry")
+        self.assertEqual(sle.valuation_rate, 45)
+        self.assertEqual(sle.qty_change, 5)
+
+        first_receipt_entry.cancel()
+        sle = frappe.get_last_doc("Stock Ledger Entry")
+        self.assertEqual(sle.valuation_rate, 50)
+        self.assertEqual(sle.qty_change, 5)
