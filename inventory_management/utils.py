@@ -16,10 +16,10 @@ def get_item_stock(item, warehouse):
 
 @frappe.whitelist()
 def get_valuation_rate(item, warehouse):
-    doc = frappe.get_last_doc(
-        "Stock Ledger Entry", filters={"item": item, "warehouse": warehouse}
+    valuation_rate = frappe.db.get_value(
+        "Stock Ledger Entry", {"item": item, "warehouse": warehouse}, "valuation_rate"
     )
-    return doc.valuation_rate if doc else 0
+    return valuation_rate if valuation_rate else 0
 
 
 @frappe.whitelist()
