@@ -16,31 +16,35 @@ class TestStockEntry(FrappeTestCase):
         frappe.set_user("Administrator")
 
     def test_stock_entry(self):
-        # Test submission
-        first_receipt_entry = submit_receipt(5, 40)
-        valuation_rate, qty_change = frappe.db.get_value(
-            "Stock Ledger Entry",
-            {"stock_entry": first_receipt_entry.name},
-            ["valuation_rate", "qty_change"],
+        (
+            first_receipt_entry,
+            consume_entry,
+            second_receipt_entry,
+            transfer_entry,
+        ) = self.stock_entry_submission()
+        self.stock_entry_cancellation(
+            transfer_entry, second_receipt_entry, consume_entry, first_receipt_entry
         )
-        # Opening Rate = 50 | Opening Qty = 5
+
+    def stock_entry_submission(self):
+        first_receipt_entry = submit_receipt(5, 40)
+        valuation_rate, qty_change = get_valuation_rate_and_qty_change(
+            first_receipt_entry.name
+        )
+        # Opening Rate = 50 | Opening Qty = 5 | Original Valuation Rate = 50
         self.assertEqual(valuation_rate, 45)
         self.assertEqual(qty_change, 5)
 
         consume_entry = submit_consume(2)
-        valuation_rate, qty_change = frappe.db.get_value(
-            "Stock Ledger Entry",
-            {"stock_entry": consume_entry.name},
-            ["valuation_rate", "qty_change"],
+        valuation_rate, qty_change = get_valuation_rate_and_qty_change(
+            consume_entry.name
         )
         self.assertEqual(valuation_rate, 45)
         self.assertEqual(qty_change, -2)
 
         second_receipt_entry = submit_receipt(2, 60)
-        valuation_rate, qty_change = frappe.db.get_value(
-            "Stock Ledger Entry",
-            {"stock_entry": second_receipt_entry.name},
-            ["valuation_rate", "qty_change"],
+        valuation_rate, qty_change = get_valuation_rate_and_qty_change(
+            second_receipt_entry.name
         )
         self.assertEqual(valuation_rate, 48)
         self.assertEqual(qty_change, 2)
@@ -56,39 +60,35 @@ class TestStockEntry(FrappeTestCase):
         self.assertEqual(sle[1].valuation_rate, 48)
         self.assertEqual(sle[1].qty_change, -3)
 
-        # Test cancellation
+        return first_receipt_entry, consume_entry, second_receipt_entry, transfer_entry
+
+    def stock_entry_cancellation(
+        self, transfer_entry, second_receipt_entry, consume_entry, first_receipt_entry
+    ):
         transfer_entry.cancel()
-        valuation_rate, qty_change = frappe.db.get_value(
-            "Stock Ledger Entry",
-            {"stock_entry": transfer_entry.name},
-            ["valuation_rate", "qty_change"],
+        valuation_rate, qty_change = get_valuation_rate_and_qty_change(
+            transfer_entry.name
         )
         self.assertEqual(valuation_rate, 48)
         self.assertEqual(qty_change, 3)
 
         second_receipt_entry.cancel()
-        valuation_rate, qty_change = frappe.db.get_value(
-            "Stock Ledger Entry",
-            {"stock_entry": second_receipt_entry.name},
-            ["valuation_rate", "qty_change"],
+        valuation_rate, qty_change = get_valuation_rate_and_qty_change(
+            second_receipt_entry.name
         )
         self.assertEqual(valuation_rate, 45)
         self.assertEqual(qty_change, -2)
 
         consume_entry.cancel()
-        valuation_rate, qty_change = frappe.db.get_value(
-            "Stock Ledger Entry",
-            {"stock_entry": consume_entry.name},
-            ["valuation_rate", "qty_change"],
+        valuation_rate, qty_change = get_valuation_rate_and_qty_change(
+            consume_entry.name
         )
         self.assertEqual(valuation_rate, 45)
         self.assertEqual(qty_change, 2)
 
         first_receipt_entry.cancel()
-        valuation_rate, qty_change = frappe.db.get_value(
-            "Stock Ledger Entry",
-            {"stock_entry": first_receipt_entry.name},
-            ["valuation_rate", "qty_change"],
+        valuation_rate, qty_change = get_valuation_rate_and_qty_change(
+            first_receipt_entry.name
         )
         self.assertEqual(valuation_rate, 50)
         self.assertEqual(qty_change, -5)
@@ -189,3 +189,11 @@ def submit_transfer(qty):
     stock_entry.insert()
     stock_entry.submit()
     return stock_entry
+
+
+def get_valuation_rate_and_qty_change(stock_entry_name):
+    return frappe.db.get_value(
+        "Stock Ledger Entry",
+        {"stock_entry": stock_entry_name},
+        ["valuation_rate", "qty_change"],
+    )
