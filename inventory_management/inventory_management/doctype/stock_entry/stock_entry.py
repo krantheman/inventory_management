@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.query_builder import DocType
 from frappe.query_builder.functions import Sum
 from frappe.model.document import Document
@@ -97,9 +98,11 @@ class StockEntry(Document):
         for d in grouped_items:
             item_stock = get_item_stock(d["item"], d["warehouse"])
             if item_stock < d["qty"]:
-                frappe.throw_(
-                    "There is not enough stock of item {0} available at {1} for this operation".format(
-                        d["item"], d["warehouse"]
+                frappe.throw(
+                    _(
+                        "There is not enough stock of item {0} available at {1} for this operation".format(
+                            d["item"], d["warehouse"]
+                        )
                     )
                 )
 
@@ -132,26 +135,28 @@ def delete_stock_ledger_entries(stock_entry):
 
 def validate_transfer(item):
     if not (item.src_warehouse and item.tgt_warehouse):
-        frappe.throw_(
-            "Source warehouse as well as target warehouse required in stock entries of type Transfer"
+        frappe.throw(
+            _(
+                "Source warehouse as well as target warehouse required in stock entries of type Transfer"
+            )
         )
     if item.src_warehouse == item.tgt_warehouse:
-        frappe.throw_("Source and target warehouse cannot be the same")
+        frappe.throw(_("Source and target warehouse cannot be the same"))
 
 
 def validate_consume(item):
     if not item.src_warehouse:
-        frappe.throw_("Source warehouse required in stock entries of type Consume")
+        frappe.throw(_("Source warehouse required in stock entries of type Consume"))
 
 
 def validate_receipt(item):
     if not item.tgt_warehouse:
-        frappe.throw_("Target warehouse required in stock entries of type Receipt")
+        frappe.throw(_("Target warehouse required in stock entries of type Receipt"))
 
 
 def validate_value(value, text):
     if value <= 0:
-        frappe.throw_("{0} must be greater than zero".format(text))
+        frappe.throw(_("{0} must be greater than zero".format(text)))
 
 
 def calculate_valuation_rate(item, rate, warehouse, qty_change):
